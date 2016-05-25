@@ -12,98 +12,23 @@ aside#menu.animated.fadeIn
   ul#side-menu.nav.metis-menu
   .col-md-12
     .panel_s
-      .panel-heading
       .panel-body
         h4 Run Report
         .form-group
           label.control-label for="contract"  Contract Amount
-          input#contract.form-control name="contract" placeholder="1000000" type="text" value="10000000"
+          input#contract.form-control name="contract" placeholder="1000000" type="text"
         .form-group
-          label.control-label data-placeholder="5" for="years"  # Years
-          select#years.form-control name="years" 
-            option value="1"  1
-            option value="2"  2
-            option value="3"  3
-            option value="4"  4
-            option value="5"  5
-            option value="6"  6
-            option value="7"  7
-            option value="8"  8
-            option value="9"  8
-            option value="10"  10
-            option value="11"  11
-            option value="12"  12
+          label.control-label for="years"  # Years
+          = select_tag :years, options_for_select((1..12).to_a, 5), class: "form-control"
         .form-group
           label.control-label for="filer"  Filing Status
-          select#filer.form-control name="filer" 
-            option value="Single"  Single
-            option value="Couple"  Couple
+          = select_tag :filter, options_for_select(['Single', 'Couple']), class: "form-control"
         .form-group
           label.control-label for="team1"  Team 1
-          select#team1.form-control name="team1" 
-            option value=("Atlanta Hawks")  Atlanta Hawks
-            option value=("Boston Celtics")  Boston Celtics
-            option value=("Charlotte Hornets")  Charlotte Hornets
-            option value=("Chicago Bulls")  Chicago Bulls
-            option value=("Cleveland Cavaliers")  Cleveland Cavaliers
-            option value=("Dallas Mavericks")  Dallas Mavericks
-            option value=("Denver Nuggets")  Denver Nuggets
-            option value=("Detroit Pistons")  Detroit Pistons
-            option value=("Golden State Warriors")  Golden State Warriors
-            option value=("Houston Rockets")  Houston Rockets
-            option value=("Indiana Pacers")  Indiana Pacers
-            option value=("Los Angeles Clippers")  Los Angeles Clippers
-            option value=("Los Angeles Lakers")  Los Angeles Lakers
-            option value=("Memphis Grizzlies")  Memphis Grizzlies
-            option value=("Miami Heat")  Miami Heat
-            option value=("Milwaukee Bucks")  Milwaukee Bucks
-            option value=("Minnesota Timberwolves")  Minnesota Timberwolves
-            option value=("New Jersey Nets")  New Jersey Nets
-            option value=("New Orleans Pelicans")  New Orleans Pelicans
-            option value=("New York Knicks")  New York Knicks
-            option value=("Oklahoma City Thunder")  Oklahoma City Thunder
-            option value=("Orlando Magic")  Orlando Magic
-            option value=("Philadelphia 76ers")  Philadelphia 76ers
-            option value=("Phoenix Suns")  Phoenix Suns
-            option value=("Portland Trail Blazers")  Portland Trail Blazers
-            option value=("Sacramento Kings")  Sacramento Kings
-            option value=("San Antonio Spurs")  San Antonio Spurs
-            option value=("Toronto Raptors")  Toronto Raptors
-            option value=("Utah Jazz")  Utah Jazz
-            option value=("Washington Wizards")  Washington Wizards
+          = select_tag :team1, options_for_select(@teams), class: "form-control"
         .form-group
           label.control-label for="team2"  Team 2
-          select#team2.form-control name="team2" 
-            option value=("Atlanta Hawks")  Atlanta Hawks
-            option value=("Boston Celtics")  Boston Celtics
-            option value=("Charlotte Hornets")  Charlotte Hornets
-            option value=("Chicago Bulls")  Chicago Bulls
-            option value=("Cleveland Cavaliers")  Cleveland Cavaliers
-            option value=("Dallas Mavericks")  Dallas Mavericks
-            option value=("Denver Nuggets")  Denver Nuggets
-            option value=("Detroit Pistons")  Detroit Pistons
-            option value=("Golden State Warriors")  Golden State Warriors
-            option value=("Houston Rockets")  Houston Rockets
-            option value=("Indiana Pacers")  Indiana Pacers
-            option value=("Los Angeles Clippers")  Los Angeles Clippers
-            option value=("Los Angeles Lakers")  Los Angeles Lakers
-            option value=("Memphis Grizzlies")  Memphis Grizzlies
-            option value=("Miami Heat")  Miami Heat
-            option value=("Milwaukee Bucks")  Milwaukee Bucks
-            option value=("Minnesota Timberwolves")  Minnesota Timberwolves
-            option value=("New Jersey Nets")  New Jersey Nets
-            option value=("New Orleans Pelicans")  New Orleans Pelicans
-            option value=("New York Knicks")  New York Knicks
-            option value=("Oklahoma City Thunder")  Oklahoma City Thunder
-            option value=("Orlando Magic")  Orlando Magic
-            option value=("Philadelphia 76ers")  Philadelphia 76ers
-            option value=("Phoenix Suns")  Phoenix Suns
-            option value=("Portland Trail Blazers")  Portland Trail Blazers
-            option value=("Sacramento Kings")  Sacramento Kings
-            option value=("San Antonio Spurs")  San Antonio Spurs
-            option value=("Toronto Raptors")  Toronto Raptors
-            option value=("Utah Jazz")  Utah Jazz
-            option value=("Washington Wizards")  Washington Wizards
+          = select_tag :team2, options_for_select(@teams), class: "form-control"
         .clearfix.mtop15
         button.btn.btn-info.pull-right.mtop15 type="submit"  Submit
 #wrapper
