@@ -14,237 +14,56 @@ aside#menu.animated.fadeIn
     .panel_s
       .panel-body
         h4 Run Report
-        = form_tag content_summary_path, method: :post
-          .form-group
-            = label_tag :contract, "Contract Amount"
-            = text_field_tag :contract, nil, placeholder: "1000000", class: "form-control"
-          .form-group
-            = label_tag :years,  "# Years"
-            = select_tag :years, options_for_select((1..12).to_a, 5), class: "form-control"
-          .form-group
-            = label_tag :filter,  "Filing Status"
-            = select_tag :filter, options_for_select(['Single', 'Couple']), class: "form-control"
-          .form-group
-            = label_tag :team1,  "Team 1"
-            = select_tag :team1, options_for_select(@teams), class: "form-control"
-          .form-group
-            = label_tag :team2,  "Team 2"
-            = select_tag :team2, options_for_select(@teams), class: "form-control"
-          .clearfix.mtop15
-          = submit_tag "Submit", class: 'button btn btn-info pull-right mtop15'
+        .form-group
+          = label_tag :contract, "Contract Amount"
+          = text_field_tag :contract, nil, placeholder: "1000000", class: "form-control"
+        .form-group
+          = label_tag :years,  "# Years"
+          = select_tag :years, options_for_select((1..12).to_a, 5), class: "form-control"
+        .form-group
+          = label_tag :filter,  "Filing Status"
+          = select_tag :filter, options_for_select(['Single', 'Couple']), class: "form-control"
+        .form-group
+          = label_tag :team1,  "Team 1"
+          = select_tag :team1, options_for_select(@teams), class: "form-control"
+        .form-group
+          = label_tag :team2,  "Team 2"
+          = select_tag :team2, options_for_select(@teams), class: "form-control"
+        .clearfix.mtop15
+        .button.btn.btn-info.pull-right.mtop15#submit-button Submit
 
 #wrapper
-  .content
-    .row
-      .col-md-12
-        .panel_s
-          .panel-body
-            a.btn.btn-default.pull-right.mright10[href="#" onclick="make_expense_pdf_export(); return false;"]
-              | PDF: 
-              i.fa.fa-file-pdf-o
-            a.btn.btn-default.pull-right.mright10[download="expenses-report-2016.xls" href="#" onclick="return ExcellentExport.excel(this, 'expenses-report-table', 'Expenses Report 2016');"]
-              | XLS: 
-              i.fa.fa-file-excel-o
-        h2 Summary Metrics
-        .panel_s
-          .panel-body
-            .row
-              .col-md-6.project-overview-column
-                .panel-heading.project-info-bg.no-radius Report Overview 
-                .panel-body.no-radius[style="min-height: 245px;"]
-                  .row
-                    .col-md-6
-                      table.table.table-borded.no-margin
-                        tbody
-                          tr
-                            td.bold Contract Amount
-                            td $ 10,000,000
-                          tr
-                            td.bold Years
-                            td 10 
-                          tr
-                            td.bold Filing Status
-                            td Single
-                          tr
-                            td.bold Team 1
-                            td Atlanta Hawks
-                          tr
-                            td.bold Team 2
-                            td Golden State Warriors
-                  .clearfix
-              .col-md-6.project-overview-column
-                .row
-                  .col-md-12
-                    h4.bold.no-margin Metrics Overview
-                    hr
-                    .row
-                      .col-xs-6
-                        h4.m-b-xs
-                          span.team1-name Team 1
-                        |  Proposed Contract 
-                        h3.no-margins
-                          span.team1-proposal
-                            | --
-                      .col-xs-6
-                        h4.m-b-xs
-                          span.team2-name
-                            | Team 2
-                        |  Matched Contract 
-                        h3.no-margins
-                          span.team2-matchcontract
-                            | --
-                      table.table
-                        tbody
-                          tr
-                            td
-                              |  AAV 
-                              span.pull-right
-                                strong
-                                  span.team1-aav
-                                    | --
-                            td
-                              |  AAV 
-                              span.pull-right
-                                strong
-                                  span.team2-aav
-                                    | --
-                          tr
-                            td
-                              |  Tax Rate 
-                              span.pull-right
-                                strong
-                                  span.team1-avgtaxrate
-                                    | --
-                            td
-                              |  Tax Rate 
-                              span.pull-right
-                                strong
-                                  span.team2-avgtaxrate
-                                    | --
-                hr
-                .row
-                  .col-md-6
-                    .progress.no-margin.project-overview-progress-bar
-                      .progress-bar.not-dynamic.progress-bar-info.no-percent-text[role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%;" data-percent="96.774193548387"]
-                        span.project-progress-number
-                          | Better Net Value
-                  .col-md-6
-                    .progress.no-margin.project-overview-progress-bar
-                      .progress-bar.not-dynamic.bg-light-green.no-percent-text[role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 0%" data-percent="0"]
-                        span.project-progress-number
-                          | Worse Less Value
-            hr
-            .row
-              .col-md-12
-                .panel-heading.project-info-bg.no-radius
-                  | Tax Summary
-                .panel-body.no-radius
-                  |  A player will make XXXX for team AAAAA, and make YYYYY for team BBBBB. Net of taxes playing for team AAAAA is a better deal. For team BBBBB to match the contract of team AAAAA, they must pay ZZZZZZ amount of dollars to make the same after tax value. 
-        h2
-          | Tax Breakdown
-        .panel_s
-          .panel-body
-            h4.no-margin.pull-right.mright10.text-info.inline-block[data-toggle="tooltip"]
+  #summary.hidden
 
-            .table-responsive
-              table#expenses-report-table.table.table-bordered.table-hover.expenses-report
-                thead
-                  tr
-                    th.bold
-                      | Tax Statement
-                tbody
-                  tr
-                    td
-                      table[width="100%" cellpadding="2" cellspacing="0" border="0"]
-                        tbody
-                          tr.yfnc_modtitle1[style="border-top:none;"]
-                            td[colspan="2" style="border-top:2px solid #000;"]
-                              small
-                                span.yfi-module-title
-                                  | Team
-                            th[scope="col" style="border-top:2px solid #000;text-align:right; font-weight:bold"]
-                              | Cleveland Cavaliers
-                            th[scope="col" style="border-top:2px solid #000;text-align:right; font-weight:bold"]
-                              | Atlanta Hawks
-                          tr
-                            td[colspan="2"]
-                              strong
-                                |  Total Income 
-                            td[align="right"]
-                              strong
-                                |  16,192,000   
-                            td[align="right"]
-                              strong
-                                |  16,192,000   
-                          tr
-                            td[colspan="2"]
-                              | Adjusted Gross Income
-                            td[align="right"]
-                              | 10,977,000  
-                            td[align="right"]
-                              | 10,921,000  
-                          tr
-                            td[colspan="5" style="height:0;padding:0; border-top:3px solid #333;"]
-                              span[style="display:block; width:5px; height:1px;"]
-                          tr
-                            td[colspan="2"]
-                              strong
-                                |  Taxes 
-                          tr
-                            td[colspan="5" style="height:0;padding:0; "]
-                              span[style="display:block; width:5px; height:10px;"]
-                          tr
-                            td.yfnc_tabledata1[width="30"]
-                              spacer[type="block" width="30" height="1"]
-                            td
-                              | Federal 
-                            td[align="right"]
-                              | 1,540,000  
-                            td[align="right"]
-                              | 1,371,000  
-                          tr
-                            td.yfnc_tabledata1[width="30"]
-                              spacer[type="block" width="30" height="1"]
-                            td
-                              | State
-                            td[align="right"]
-                              | 674,000  
-                            td[align="right"]
-                              | 939,000  
-                          tr
-                            td.yfnc_tabledata1[width="30"]
-                              spacer[type="block" width="30" height="1"]
-                            td
-                              | City
-                            td[align="right"]
-                              | 674,000  
-                            td[align="right"]
-                              | 939,000  
-                          tr
-                            td.yfnc_tabledata1[width="30"]
-                              spacer[type="block" width="30" height="1"]
-                            td
-                              | Social Security
-                            td[align="right"]
-                              | 3,000  
-                            td[align="right"]
-                              | 40,000  
-                          tr
-                            td.yfnc_tabledata1[width="30"]
-                              spacer[type="block" width="30" height="1"]
-                            td
-                              | Fica
-                            td[align="right"]
-                              |  -   
-                            td[align="right"]
-                              |  -   
-                          tr
-                            td[colspan="2"]
-                              strong
-                                |  Net Income Applicable To Common Shares 
-                            td[align="right"]
-                              strong
-                                |  2,899,000   
-                            td[align="right"]
-                              strong
-                                |  3,045,000   
+javascript:
+
+  $("#submit-button").click(function() {
+    var params = {
+      contract: $("#contract").val(),
+      years: $("#years").val(),
+      filter: $("#filter").val(),
+      team1: $("#team1").val(),
+      team2: $("#team2").val()
+    };
+
+    var errorMessage = "<div class='text-center'><h4 style='margin:2em'><i class='fa fa-4x fa-frown-o'></i><br />There was an error rendering summary page. Please refresh and try again.</h4></div>";
+
+    var contract = $("#contract").val();
+    var years = $("#years").val();
+    var filter = $("#filter").val();
+    var team1 = $("#team1").val();
+    var team2 = $("#team2").val();
+
+    $.post( "#{content_summary_path}", {
+      contract: contract,
+      years: years,
+      filter: filter,
+      team1: team1, 
+      team2: team2
+    }).error(function( data ) {
+      $("#summary").html(errorMessage);
+    });
+
+    $('#summary').removeClass('hidden');
+    $('#summary').show();
+  });
