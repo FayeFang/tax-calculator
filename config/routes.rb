@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  root 'content#index'
+  root 'content#lookup'
 
-  resources :content
+  scope 'content' do
+    get  '',          to: 'content#lookup'
+    post '/summary',  to: 'content#summary', as: :content_summary
+  end
 end

@@ -1,36 +1,15 @@
 class ContentController < ApplicationController
-  def index
-    @teams = [
-      'Atlanta Hawks',
-      'Boston Celtics',
-      'Charlotte Hornets',
-      'Chicago Bulls',
-      'Cleveland Cavaliers',
-      'Dallas Mavericks',
-      'Denver Nuggets',
-      'Detroit Pistons',
-      'Golden State Warriors',
-      'Houston Rockets',
-      'Indiana Pacers',
-      'Los Angeles Clippers',
-      'Los Angeles Lakers',
-      'Memphis Grizzlies',
-      'Miami Heat',
-      'Milwaukee Bucks',
-      'Minnesota Timberwolves',
-      'New Jersey Nets',
-      'New Orleans Pelicans',
-      'New York Knicks',
-      'Oklahoma City Thunder',
-      'Orlando Magic',
-      'Philadelphia 76ers',
-      'Phoenix Suns',
-      'Portland Trail Blazers',
-      'Sacramento Kings',
-      'San Antonio Spurs',
-      'Toronto Raptors',
-      'Utah Jazz',
-      'Washington Wizards'
-    ]
+  include Tax::TaxHelper
+
+  def lookup
+    @teams = get_teams
+  end
+
+  def summary
+    head_to_heads(lookup_hash[:team1], lookup_hash[:team2])
+  end
+
+  private def lookup_hash
+    @lookup_hash = params.permit(:contract, :years, :filter, :team1, :team2)
   end
 end
