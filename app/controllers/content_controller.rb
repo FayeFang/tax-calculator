@@ -6,7 +6,7 @@ class ContentController < ApplicationController
   end
 
   def summary
-    head_to_heads(lookup_hash[:team1], lookup_hash[:team2])
+    @lookup_hash = lookup_hash
   end
 
   private def lookup_hash

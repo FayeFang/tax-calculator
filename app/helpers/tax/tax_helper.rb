@@ -30,7 +30,7 @@ module Tax::TaxHelper
     teams_array = []
     months_array = %w(January February March April May June July August September October November December)
 
-    CSV.open('info.csv').each_with_index do |row, index|
+    CSV.open("#{Rails.root}/public/info.csv").each_with_index do |row, index|
       next if index < 2
       next if months_array.include? row[3]
       next if months_array.include? row[5]
@@ -43,7 +43,7 @@ module Tax::TaxHelper
 
   def away_schedules(team)
     h = Hash.new(0)
-    CSV.open('info.csv').each_with_index do |row, index|
+    CSV.open("#{Rails.root}/public/info.csv").each_with_index do |row, index|
       next if index < 2
       if row[3] == team # team is an away team
         # count += 1
@@ -76,13 +76,13 @@ module Tax::TaxHelper
     final_array
   end
 
-  teams = get_teams
-  teams.each do |team|
-    # puts "Away Schedules for #{team}"
-    away_schedules(team)
-    # puts "*" * 20
-    get_percentage_for(team)
-  end
+  # teams = get_teams
+  # teams.each do |team|
+  #   # puts "Away Schedules for #{team}"
+  #   away_schedules(team)
+  #   # puts "*" * 20
+  #   get_percentage_for(team)
+  # end
 
   LOCATION_HASH = {'Toronto Raptors' => [ 'Toronto','ON','CA'],
                   'Miami Heat' => [ 'Miami','FL','US'],
@@ -217,7 +217,7 @@ module Tax::TaxHelper
       if state == 'OK'
         oklahoma(income, status, pct)
       end
-          if state == 'MA'
+      if state == 'MA'
         massachusetts(income, status, pct)
       end
     end
