@@ -16,7 +16,7 @@ aside#menu.animated.fadeIn
         h4 Run Report
         .form-group
           = label_tag :contract, "Contract Amount"
-          = text_field_tag :contract, nil, placeholder: "1000000", class: "form-control"
+          = text_field_tag :contract, "100000", placeholder: "1000000", class: "form-control"
         .form-group
           = label_tag :years,  "# Years"
           = select_tag :years, options_for_select((1..12).to_a, 5), class: "form-control"

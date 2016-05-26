@@ -26,37 +26,11 @@ require 'rubygems'
 require 'csv'
 
 module Tax::TaxHelper
-  def head_to_heads(team1, team2)
-    away_team = team1
-    home_team = team2
-
-    home_team_hash = Hash.new(0)
-    away_team_hash = Hash.new(0)
-    count = 0
-    CSV.open("#{Rails.root}/public/info.csv").each_with_index do |row, index|
-      next if index < 2
-      # home_team_hash[row[3]]+= 1
-      # away_team_hash[row[5]]+= 1
-      # puts "visiting team: #{row[3]}"
-      # puts "home team: #{row[5]}"
-      if (row[3] == away_team && row[5] == home_team) || (row[3] == home_team && row[5] == away_team)
-        count += 1
-        puts "#{row[3]}@#{row[5]}"
-      end
-    end
-
-    puts "count: #{count}"
-  end
-
-  # head_to_heads('Toronto Raptors', 'Brooklyn Nets')
-  # puts "*" * 20
-  # head_to_heads('Detroit Pistons', 'Atlanta Hawks')
-
   def get_teams
     teams_array = []
     months_array = %w(January February March April May June July August September October November December)
 
-    CSV.open("#{Rails.root}/public/info.csv").each_with_index do |row, index|
+    CSV.open('info.csv').each_with_index do |row, index|
       next if index < 2
       next if months_array.include? row[3]
       next if months_array.include? row[5]
@@ -69,47 +43,183 @@ module Tax::TaxHelper
 
   def away_schedules(team)
     h = Hash.new(0)
-    CSV.open("#{Rails.root}/public/info.csv").each_with_index do |row, index|
+    CSV.open('info.csv').each_with_index do |row, index|
       next if index < 2
-      next unless row[3] == team # team is an away team
-      # count += 1
-      h[row[3]] += 1
-      h[row[5]] += 1
-      # puts "#{row[3]}@#{row[5]}"
+      if row[3] == team # team is an away team
+        # count += 1
+        h[row[3]] += 1
+        h[row[5]] += 1
+        # puts "#{row[3]}@#{row[5]}"
+      end
     end
-    puts h.inspect
     h
+    # puts h.inspect
   end
 
   def get_percentage_for(team)
     final_array = []
     days_in_season = 199.0
     schedule_hash = away_schedules(team)
-    p schedule_hash
+    # p schedule_hash
     schedule_hash.each do |key, value|
-      pct = (value / days_in_season).to_f
+      if key == team
+        pct = 1
+      else
+        pct = (value / days_in_season).to_f
+      end
       # puts "#{team} in #{key}, pct: #{pct}"
       # puts "#{key}, #{value}, #{pct}"
       final_array << [key, value, pct]
       # puts "*" * 20
     end
-    puts "final_array: #{final_array.inspect}"
+    # puts "final_array: #{final_array.inspect}"
+    final_array
   end
 
-  #   teams = get_teams
-  # puts "teams count: #{teams.count}"
-  # p teams.combination(2).to_a.count
-  #  teams.combination(2).to_a.each do |teams|
-  #  	puts teams.inspect
-  # 	head_to_heads(teams[0], teams[1])
-  #  end
+  teams = get_teams
+  teams.each do |team|
+    # puts "Away Schedules for #{team}"
+    away_schedules(team)
+    # puts "*" * 20
+    get_percentage_for(team)
+  end
 
-  #     puts "#" * 25
+  LOCATION_HASH = {'Toronto Raptors' => [ 'Toronto','ON','CA'],
+                  'Miami Heat' => [ 'Miami','FL','US'],
+                  'Dallas Mavericks' => [ 'Dallas','TX','US'],
+                  'Orlando Magic' => [ 'Orlando','FL','US'],
+                  'San Antonio Spurs' => [ 'San Antonio','TX','US'],
+                  'Indiana Pacers' => [ 'Indianapolis','IN','US'],
+                  'Brooklyn Nets' => [ 'Brooklyn','NY','US'],
+                  'Milwaukee Bucks' => [ 'Milwaukee','WI','US'],
+                  'Oklahoma City Thunder' => [ 'Oklahoma City','OK','US'],
+                  'Memphis Grizzlies' => [ 'Memphis','TN','US'],
+                  'Sacramento Kings' => [ 'Sacramento','CA','US'],
+                  'New York Knicks' => [ 'New York City','NY','US'],
+                  'Portland Trail Blazers' => [ 'Portland','OR','US'],
+                  'Golden State Warriors' => [ 'Oakland','CA','US'],
+                  'Denver Nuggets' => [ 'Denver','CO','US'],
+                  'Atlanta Hawks' => [ 'Atlanta','GA','US'],
+                  'Cleveland Cavaliers' => [ 'Cleveland','OH','US'],
+                  'New Orleans Pelicans' => [ 'New Orleans','LA','US'],
+                  'Los Angeles Clippers' => [ 'Los Angeles','CA','US'],
+                  'Phoenix Suns' => [ 'Phoenix','AZ','US'],
+                  'Minnesota Timberwolves' => [ 'Minneapolis','MN','US'],
+                  'Boston Celtics' => [ 'Boston','MA','US'],
+                  'Detroit Pistons' => [ 'Detroit','MI','US'],
+                  'Charlotte Hornets' => [ 'Charlotte','NC','US'],
+                  'Houston Rockets' => [ 'Houston','TX','US'],
+                  'Chicago Bulls' => [ 'Chicago','IL','US'],
+                  'Washington Wizards' => [ 'Washington','DC','US'],
+                  'Utah Jazz' => [ 'Salt Lake City','UT','US'],
+                  'Philadelphia 76ers' => [ 'Philadelphia','PA','US'],
+                  'Los Angeles Lakers' => [ 'Los Angeles','CA','US'],}
 
-  #     teams.each do |team|
-  #     	puts "Away Schedules for #{team}"
-  #     	away_schedules(team)
-  #     	puts "*" * 20
-  #     	get_percentage_for(team)
-  # end
+  def get_country(team)
+    LOCATION_HASH[team][2]
+  end
+
+  def get_state(team)
+    LOCATION_HASH[team][1]
+  end
+
+  def get_city(team)
+    LOCATION_HASH[team][0]
+  end
+
+  def calculate_tax(team_name, status, income)
+    city = get_city(team_name)
+    state = get_state(team_name)
+    country = get_country(team_name)
+
+    team_with_pcts = get_percentage_for(team_name)
+    team_with_pcts.each do |a|
+      puts "\n"
+      puts "*" * 20
+       a.inspect
+      team = a[0]
+      pct = a[2]
+      city = get_city(team)
+      state = get_state(team)
+      country = get_country(team)
+      
+      if state == 'ON'
+        ontario(income, status, pct)
+      end
+      if state == 'WI'
+        wisconsin(income, status, pct)
+      end
+      if state == 'GA'
+        georgia(income, status, pct)
+      end
+      if state == 'IL'
+        illinois(income, status, pct)
+      end
+      if state == 'AZ'
+        arizona(income, status, pct)
+      end
+      if state == 'CA'
+        california(income, status, pct)
+      end
+      if state == 'NY'
+        newyork(income, status, pct)
+      end
+      if city = 'Philedelphia' && state == 'PA'
+        pennsylvania(income, status, pct)
+        philedelphia(income, status, pct)
+      end
+      if city == 'Cinncinati' && state == 'OH'
+        ohio(income, status, pct)
+      end
+      if city == 'Cleveland' && state == 'OH'
+        ohio(income, status, pct)
+        cleveland(income, status, pct)
+      end
+      if state == 'CO'
+        colorado(income, status, pct)
+      end
+      if state == 'MN'
+        minnesota(income, status, pct)
+      end
+      if state == 'MI'
+        michigan(income, status, pct)
+      end
+      if state == 'LA'
+        louisiana(income, status, pct)
+      end
+      if state == 'FL'
+        florida(income, status, pct)
+      end
+      if state == 'TN'
+        tennesee(income, status, pct)
+      end
+      if state == 'NC'
+        northcarolina(income, status, pct)
+      end
+      if state == 'ONT'
+        ontario(income, status, pct)
+      end
+      if state == 'DC'
+        dc(income, status, pct)
+      end
+      if state == 'TX'
+        texas(income, status, pct)
+      end
+      if state == 'IN'
+        indiana(income, status, pct)
+      end
+      if state == 'OR'
+        oregon(income, status, pct)
+      end
+      if state == 'UT'
+        utah(income, status, pct)
+      end
+      if state == 'OK'
+        oklahoma(income, status, pct)
+      end
+          if state == 'MA'
+        massachusetts(income, status, pct)
+      end
+    end
+  end
 end

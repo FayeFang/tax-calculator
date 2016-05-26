@@ -1,4 +1,3 @@
-
 def louisiana(income, status, pct)
   # Gross Income.
   # income = 1000000
