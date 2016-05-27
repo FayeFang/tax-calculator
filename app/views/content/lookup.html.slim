@@ -1,0 +1,69 @@
+#header
+  .header-link.hide-menu.visible-xs.visible-sm.visible-md
+    i.fa.fa-bars data-placement="right" data-toggle="tooltip" title=("Toggle Sidebar") 
+  #logo
+    a.logo href="#" 
+      img alt="Jock Tax" src=image_path("logo.png")
+  nav
+#mobile-search.hide
+  ul
+#customize-sidebar.animated
+aside#menu.animated.fadeIn
+  ul#side-menu.nav.metis-menu
+  .col-md-12
+    .panel_s
+      .panel-body
+        h4 Run Report
+        .form-group
+          = label_tag :contract, "Contract Amount"
+          = text_field_tag :contract, "100000", placeholder: "1000000", class: "form-control"
+        .form-group
+          = label_tag :years,  "# Years"
+          = select_tag :years, options_for_select((1..12).to_a, 5), class: "form-control"
+        .form-group
+          = label_tag :filter,  "Filing Status"
+          = select_tag :filter, options_for_select(['Single', 'Couple']), class: "form-control"
+        .form-group
+          = label_tag :team1,  "Team 1"
+          = select_tag :team1, options_for_select(@teams), class: "form-control"
+        .form-group
+          = label_tag :team2,  "Team 2"
+          = select_tag :team2, options_for_select(@teams), class: "form-control"
+        .clearfix.mtop15
+        .button.btn.btn-info.pull-right.mtop15#submit-button Submit
+
+#wrapper
+  #summary.hidden
+
+javascript:
+
+  $("#submit-button").click(function() {
+    var params = {
+      contract: $("#contract").val(),
+      years: $("#years").val(),
+      filter: $("#filter").val(),
+      team1: $("#team1").val(),
+      team2: $("#team2").val()
+    };
+
+    var errorMessage = "<div class='text-center'><h4 style='margin:2em'><i class='fa fa-4x fa-frown-o'></i><br />There was an error rendering summary page. Please refresh and try again.</h4></div>";
+
+    var contract = $("#contract").val();
+    var years = $("#years").val();
+    var filter = $("#filter").val();
+    var team1 = $("#team1").val();
+    var team2 = $("#team2").val();
+
+    $.post( "#{content_summary_path}", {
+      contract: contract,
+      years: years,
+      filter: filter,
+      team1: team1, 
+      team2: team2
+    }).error(function( data ) {
+      $("#summary").html(errorMessage);
+    });
+
+    $('#summary').removeClass('hidden');
+    $('#summary').show();
+  });
